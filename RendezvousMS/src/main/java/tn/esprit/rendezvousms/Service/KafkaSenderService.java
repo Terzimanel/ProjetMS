@@ -1,19 +1,14 @@
-package tn.esprit.rendezvousms.kafka;
-
+package tn.esprit.rendezvousms.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RendezVousProducer {
-
-    private final KafkaTemplate<String, String> kafkaTemplate;
+public class KafkaSenderService {
 
     @Autowired
-    public RendezVousProducer(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage(String topic, String message) {
         kafkaTemplate.send(topic, message);

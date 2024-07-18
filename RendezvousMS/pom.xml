@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>StockMs</artifactId>
+    <artifactId>rendezvousms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Spring-CRUD-SQL</name>
     <description>Spring-CRUD-SQL</description>

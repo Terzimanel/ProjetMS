@@ -7,7 +7,6 @@ import tn.esprit.dto.PatientDto;
 import tn.esprit.dto.RendezVousDto;
 import tn.esprit.dto.RendezVousDtokafka;
 import tn.esprit.rendezvousms.entity.RendezVous;
-import tn.esprit.rendezvousms.kafka.KafkaProducerService;
 import tn.esprit.rendezvousms.kafka.RendezVousProducer;
 import tn.esprit.rendezvousms.mapper.RendezVousDtokafkaMapper;
 import tn.esprit.rendezvousms.mapper.RendezVousMapper;
@@ -19,8 +18,7 @@ import java.util.List;
 public class RendezVousService implements RendezVousServiceInt{
     @Autowired
     private RendezVousRepository rendezVousRepository;
-    @Autowired
-    private RendezVousProducer producer;
+
     @Autowired
     private PaientClient paientClient;
     @Autowired
@@ -28,13 +26,7 @@ public class RendezVousService implements RendezVousServiceInt{
     @Autowired
     private RendezVousDtokafkaMapper rendezVousDtokafkaMapper;
     @Autowired
-    private KafkaProducerService kafkaProducerService;
-   /* public void createRDV(RendezVous rendezVous) {
-        // Save RendezVous to the database
-        rendezVousRepository.save(rendezVous);
-        // Send event to Kafka
-        kafkaProducer.sendMessage( rendezVous);
-    }*/
+    private RendezVousProducer kafkaSenderService;
     public List<RendezVous> getAllRendezVous() {
         return rendezVousRepository.findAll();
     }
@@ -47,6 +39,8 @@ public class RendezVousService implements RendezVousServiceInt{
         RendezVousDtokafka rendezVousDtokafka = rendezVousDtokafkaMapper.rendezVousToRendezVousDtoKafka(rendezVous);
         //kafkaProducerService.sendMessage(rendezVousDtokafka);
      //   producer.sendMessage(rendezVousDtokafka);
+        kafkaSenderService.sendMessage("rendezvous-events", "Rendez-vous créé: " + rendezVous.getId());
+
         return rendezVousRepository.save(rendezVous);
     }
 
