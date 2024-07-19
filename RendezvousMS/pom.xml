@@ -16,6 +16,8 @@
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version> <!-- Ajout de la version de Spring Cloud -->
+        <axon.version>4.6.3</axon.version> <!-- Ajout de la version d'Axon -->
+        <axon-kafka.version>4.6.0</axon-kafka.version> <!-- Ajout de la version d'Axon Kafka -->
     </properties>
 
     <dependencyManagement>
@@ -81,11 +83,11 @@
         </dependency>
 
         <!-- Dépendance pour kafka -->
-
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
+
         <!-- Dépendance pour MySQL -->
         <dependency>
             <groupId>mysql</groupId>
@@ -94,6 +96,19 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Axon Framework Dependencies -->
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-spring-boot-starter</artifactId>
+            <version>${axon.version}</version>
+        </dependency>
+
+        <!-- Axon Kafka Extension -->
+        <dependency>
+            <groupId>org.axonframework.extensions.kafka</groupId>
+            <artifactId>axon-kafka-spring-boot-starter</artifactId>
+            <version>${axon-kafka.version}</version>
+        </dependency>
 
     </dependencies>
 
