@@ -2,23 +2,26 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Ms-ConfigServer" />
+        <module name="ConfigServer" />
         <module name="ProductMs" />
         <module name="rendezvousms" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Ms-ConfigServer" target="17" />
       <module name="patientms" target="17" />
       <module name="StockMs" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ConfigServer" options="-parameters" />
       <module name="Ms-ConfigServer" options="-parameters" />
       <module name="ProductMs" options="-parameters" />
       <module name="StockMs" options="-parameters" />
