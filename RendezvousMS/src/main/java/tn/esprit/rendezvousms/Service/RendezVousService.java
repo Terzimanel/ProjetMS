@@ -13,76 +13,77 @@ import tn.esprit.rendezvousms.mapper.RendezVousMapper;
 import tn.esprit.rendezvousms.repository.RendezVousRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class RendezVousService implements RendezVousServiceInt{
+public class RendezVousService implements RendezVousServiceInt {
     @Autowired
     private RendezVousRepository rendezVousRepository;
 
     @Autowired
     private PaientClient paientClient;
+
     @Autowired
     private RendezVousMapper rendezVousMapper;
+
     @Autowired
     private RendezVousDtokafkaMapper rendezVousDtokafkaMapper;
+
     @Autowired
     private RendezVousProducer kafkaSenderService;
-    public List<RendezVous> getAllRendezVous() {
-        return rendezVousRepository.findAll();
+
+    @Override
+    public List<RendezVousDto> getAllRendezVous() {
+        return rendezVousRepository.findAll().stream()
+                .map(rendezVousMapper::RendezVousToRendezVousDto)
+                .collect(Collectors.toList());
     }
 
-    public RendezVous getRendezVousById(Long id) {
-        return rendezVousRepository.findById(id).orElse(null);
+    @Override
+    public RendezVousDto getRendezVousById(Long id) {
+        return rendezVousRepository.findById(id)
+                .map(rendezVousMapper::RendezVousToRendezVousDto)
+                .orElse(null);
     }
 
-    public RendezVous createRendezVous(RendezVous rendezVous) {
+    @Override
+    public RendezVousDto createRendezVous(RendezVousDto rendezVousDto) {
+        RendezVous rendezVous = rendezVousMapper.RendezVousDtoToRendezVous(rendezVousDto);
         RendezVousDtokafka rendezVousDtokafka = rendezVousDtokafkaMapper.rendezVousToRendezVousDtoKafka(rendezVous);
-        //kafkaProducerService.sendMessage(rendezVousDtokafka);
-     //   producer.sendMessage(rendezVousDtokafka);
-        kafkaSenderService.sendMessage("rendezvous-events", "Rendez-vous créé: " + rendezVous.getId());
+        kafkaSenderService.sendMessage("rendezvous-events", "Rendez-vous créé: " + rendezVousDtokafka.getId());
 
-        return rendezVousRepository.save(rendezVous);
+        RendezVous savedRendezVous = rendezVousRepository.save(rendezVous);
+        return rendezVousMapper.RendezVousToRendezVousDto(savedRendezVous);
     }
 
-    public RendezVous updateRendezVous(Long id, RendezVous rendezVous) {
+    @Override
+    public RendezVousDto updateRendezVous(Long id, RendezVousDto rendezVousDto) {
         if (rendezVousRepository.existsById(id)) {
+            RendezVous rendezVous = rendezVousMapper.RendezVousDtoToRendezVous(rendezVousDto);
             rendezVous.setId(id);
-            return rendezVousRepository.save(rendezVous);
+            RendezVous updatedRendezVous = rendezVousRepository.save(rendezVous);
+            return rendezVousMapper.RendezVousToRendezVousDto(updatedRendezVous);
         } else {
             return null;
         }
     }
 
+    @Override
     public void deleteRendezVous(Long id) {
         rendezVousRepository.deleteById(id);
     }
 
-    //OpenFeign
-   /* public PatientDto getPatientRdv(long rdvid) {
-        RendezVous rendezVous = rendezVousRepository.findById(rdvid).orElseThrow(() -> new RuntimeException("rdv not found"));
-        PatientDto patientDto = paientClient.getPatientById(rendezVous.getPatientId());
-        return patientDto;
-    }*/
-
+    @Override
     public RendezVousDto getPatientRdv(long rdvid) {
         RendezVous rendezVous = rendezVousRepository.findById(rdvid)
                 .orElseThrow(() -> new RuntimeException("rdv not found"));
 
-        // Utilisation du mapper pour convertir l'entité RendezVous en RendezVousDto
         RendezVousDto rendezVousDto = rendezVousMapper.RendezVousToRendezVousDto(rendezVous);
 
-        // Récupération des informations du patient
         PatientDto patientDto = paientClient.getPatientById(rendezVous.getPatientId());
 
-        // Ajout des informations du patient au DTO du rendez-vous
         rendezVousDto.setPatient(patientDto);
 
         return rendezVousDto;
     }
-
-    @Override
-    public void createRDV(RendezVous rendezVous) {
-
-    }
 }
-

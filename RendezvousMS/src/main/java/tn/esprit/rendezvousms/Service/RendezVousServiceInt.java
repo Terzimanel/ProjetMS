@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface RendezVousServiceInt {
 
-    public List<RendezVous> getAllRendezVous() ;
+    public List<RendezVousDto> getAllRendezVous() ;
 
-    public RendezVous getRendezVousById(Long id) ;
+    public RendezVousDto getRendezVousById(Long id) ;
 
-    public RendezVous createRendezVous(RendezVous rendezVous) ;
+    public RendezVousDto createRendezVous(RendezVousDto rendezVousDto) ;
 
-    public RendezVous updateRendezVous(Long id, RendezVous rendezVous) ;
+    public RendezVousDto updateRendezVous(Long id, RendezVousDto rendezVousDto);
 
     public void deleteRendezVous(Long id) ;
    // public PatientDto getPatientRdv(long rdvid);
    public RendezVousDto getPatientRdv(long rdvid);
-    public void createRDV(RendezVous rendezVous);
+
 }

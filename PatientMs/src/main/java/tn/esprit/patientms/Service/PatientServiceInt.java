@@ -1,17 +1,18 @@
 package tn.esprit.patientms.Service;
 
+import tn.esprit.dto.PatientDto;
 import tn.esprit.patientms.entity.Patient;
 
 import java.util.List;
 
 public interface PatientServiceInt {
-    public List<Patient> getAllPatients() ;
+    public List<PatientDto> getAllPatients() ;
 
-    public Patient getPatientById(String id) ;
+    public PatientDto getPatientById(String id) ;
 
-    public Patient createPatient(Patient patient) ;
+    public PatientDto createPatient(PatientDto patient) ;
 
-    public Patient updatePatient(String id, Patient patient) ;
+    public PatientDto updatePatient(String id, PatientDto patient) ;
 
     public void deletePatient(String id) ;
 }

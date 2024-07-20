@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 import tn.esprit.dto.PatientDto;
 import tn.esprit.patientms.entity.Patient;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PatientMapper {
 
     PatientMapper INSTANCE = Mappers.getMapper(PatientMapper.class);
